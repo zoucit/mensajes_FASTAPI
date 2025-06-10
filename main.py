@@ -35,7 +35,7 @@ def obtener_mensaje(mensaje_id: int):
 def listar_mensajes():
     return mensajes_db
 
-#Actualizamos mensajes por ID
+# Actualizamos mensajes por ID
 @app.put("/mensajes/{mensaje_id}", response_model=Mensaje)
 def actualizar_mensaje(mensaje_id: int, mensaje_actualizado: Mensaje):
     for index, mensaje in enumerate (mensajes_db):
@@ -44,6 +44,15 @@ def actualizar_mensaje(mensaje_id: int, mensaje_actualizado: Mensaje):
             mensajes_db[index] = mensaje_actualizado
             return mensaje_actualizado
     raise HTTPException(status_code=404, detail="Mensaje NO encontrado para actualizar")
+
+# Borramos mensaje por ID
+@app.delete("/mensajes/{mensaje_id}", response_model=dict)
+def eliminar_mensaje(mensaje_id: int):
+    for index, mensaje in enumerate (mensajes_db):
+        if mensaje.id == mensaje_id:
+            del mensajes_db[index]
+            return{"detail":"Mensaje Eliminado"}
+    raise HTTPException(status_code=404, detail="Mensaje NO encontrado para eliminar")
 
 
 
